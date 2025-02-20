@@ -6,7 +6,8 @@ body {
 
 .todos-bg-container {
   background-color: #f9fbfe;
-  height: 100vh;
+  min-height: 120vh;
+  padding-bottom: 20px;
 }
 
 .container {
