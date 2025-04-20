@@ -156,3 +156,10 @@ body {
 .checked {
   text-decoration: line-through;
 }
+
+.loader {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

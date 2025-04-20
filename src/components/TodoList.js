@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { fetchTodos, addTodo, deleteTodo, updateTodo } from "../services/api";
 import TodoItem from "./TodoItem";
+import { RingLoader } from 'react-spinners';
 
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
     const [newTodo, setNewTodo] = useState("");
+    const [loading, setLoading] = useState(true); 
 
     // Fetch todos from database on load
     const getTodos = async () => {
+        setLoading(true); 
         const todos = await fetchTodos();
         setTodos(todos);
+        setLoading(false); 
     };
 
     useEffect(() => {
@@ -24,8 +28,10 @@ const TodoList = () => {
     };
 
     const handleToggleTodo = async (id, currentStatus) => {
-        await updateTodo(id, !currentStatus); 
-        setTodos(todos.map(todo => (todo._id === id ? { ...todo, status: !currentStatus } : todo)));
+        await updateTodo(id, !currentStatus);
+        setTodos(todos.map(todo =>
+            todo._id === id ? { ...todo, status: !currentStatus } : todo
+        ));
     };
 
     const handleDeleteTodo = async (id) => {
@@ -52,11 +58,23 @@ const TodoList = () => {
                 My <span className="todo-items-heading-subpart">Tasks</span>
             </h1>
 
-            <ul className="todo-items-container">
-                {todos.map(todo => (
-                    <TodoItem key={todo._id} todo={todo} onDelete={handleDeleteTodo} onToggle={handleToggleTodo} />
-                ))}
-            </ul>
+            
+            {loading ? (
+                <div className="loader">
+                    <RingLoader color="#096f92" size={60} />
+                </div>
+            ) : (
+                <ul className="todo-items-container">
+                    {todos.map(todo => (
+                        <TodoItem
+                            key={todo._id}
+                            todo={todo}
+                            onDelete={handleDeleteTodo}
+                            onToggle={handleToggleTodo}
+                        />
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };
